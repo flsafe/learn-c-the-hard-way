@@ -38,7 +38,7 @@ void List_push(List *list, void *value)
 
 	node->value = value;
 
-	if(list->last){
+	if(NULL == list->last){
 		list->first = node;
 		list->last = node;
 	} else {
@@ -56,6 +56,28 @@ error:
 void *List_pop(List *list){
 	ListNode *node = list->last;
 	return node != NULL ? List_remove(list, node) : NULL;
+}
+
+void List_shift(List *list, void *value)
+{
+	ListNode *node = calloc(1, sizeof(ListNode));
+	check_mem(node);
+
+	node->value = value;
+
+	if(list->first == NULL){
+		list->first = node;
+		list->last = node;
+	} else {
+		list->first->prev = node;
+		node->next = list->first;
+		list->first = node;
+	}
+
+	list->count++;
+
+error:
+	return;
 }
 
 void *List_unshift(List *list)

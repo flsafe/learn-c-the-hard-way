@@ -28,10 +28,17 @@ build:
 	@mkdir -p build
 	@mkdir -p bin
 
+#.PHONY: tests
+#tests: CFLAGS += $(TARGET)
+#tests: $(TESTS)
+#	sh ./tests/runtests.sh
+
 .PHONY: tests
-tests: CFLAGS += $(TARGET)
 tests: $(TESTS)
 	sh ./tests/runtests.sh
+
+$(TESTS): $(TARGET)
+	$(CC) $(CFLAGS) $@.c $< -o $@
 
 valgrind:
 	VALGRIND="valgrind --log-file=/tmp/valgrind-%p.log" $(MAKE)
